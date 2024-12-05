@@ -334,14 +334,14 @@ def start(args):
         def get_index(i):
             return i % len(data_start)
     else:  # sample all phases equally
-        unique = set(phases)
+        unique = list(set(phases))
         indices = {phase: () for phase in phases}
         for i, phase in enumerate(phases):
             indices[phase] += (i,)
 
         def get_index(i, indices):
             phase_index = i % len(unique)
-            to_select_from = indices[phase_index]
+            to_select_from = indices[unique[phase_index]]
             return to_select_from[i // len(indices)]
 
         get_index = partial(get_index, indices=indices)
