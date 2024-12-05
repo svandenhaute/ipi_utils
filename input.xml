@@ -1,0 +1,45 @@
+<simulation verbosity='medium'>
+  <output prefix='output'>
+    <properties filename='md' stride='20'> [step, time{picosecond}, conserved{kelvin}, temperature{kelvin}, potential{kelvin}] </properties>
+    <trajectory filename='trajectory' stride='20' format='ase' bead='0'> positions </trajectory>
+    <checkpoint filename='checkpoint' stride='20' overwrite='True'> </checkpoint>
+  </output>
+  <total_steps> 200 </total_steps>
+  <ffsocket mode='unix' name='MACE'>
+      <address> socket0 </address>
+      <exit_on_disconnect> True </exit_on_disconnect>
+  </ffsocket>
+  <system_template>
+      <labels> [ INDEX, TEMP ] </labels>
+      <instance> [ 0, 300 ] </instance>
+      <instance> [ 1, 300 ] </instance>
+      <instance> [ 2, 300 ] </instance>
+      <instance> [ 3, 300 ] </instance>
+      <instance> [ 4, 300 ] </instance>
+      <instance> [ 5, 300 ] </instance>
+      <instance> [ 6, 300 ] </instance>
+      <instance> [ 7, 300 ] </instance>
+      <template>
+  <system prefix="walker-INDEX">
+    <initialize nbeads='1'>
+      <file mode='ase' units='angstrom'> start_INDEX.xyz </file>
+    </initialize>
+    <forces>
+      <force forcefield='MACE'/>
+    </forces>
+    <ensemble>
+      <temperature units='kelvin'> TEMP </temperature>
+    </ensemble>
+    <motion mode='dynamics'>
+      <dynamics mode='nvt'>
+        <thermostat mode='langevin'>
+          <tau units='femtosecond'> 25 </tau>
+        </thermostat>
+        <timestep units='femtosecond'> 0.5 </timestep>
+      </dynamics>
+    </motion>
+  </system>
+  </template>
+  </system_template>
+  <smotion mode="dummy"> </smotion>
+</simulation>
