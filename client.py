@@ -111,6 +111,10 @@ def parse_arguments():
                         default=100,
                         required=False,
                         help='Path to PyTorch model file')
+    parser.add_argument('--warmup',
+                        type=bool,
+                        action="store_true",
+                        help='Path to XYZ file to initialize calculator')
 
     return parser.parse_args()
 
@@ -138,6 +142,10 @@ def main():
         )
 
     atoms.calc = calculator
+    if args.warmup:
+        for i in range(10):
+            atoms.get_potential_energy()
+            atoms.calc.reset()
 
     # Set up socket connection
     driver = Driver(atoms, calculator)
