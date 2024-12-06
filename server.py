@@ -405,7 +405,9 @@ def cleanup(args):
         else:
             assert sum(exists) == 1
         path = paths[exists.index(True)]
-        traj = read(str(path)[:-6] + 'xyz', index=":")
+        path_xyz = Path(str(path)[:-6] + 'xyz')
+        os.rename(path, path_xyz)
+        traj = read(path_xyz, index=":")
         path.unlink()
         for atoms in traj:
             if not states[i].periodic:  # load and replace cell
