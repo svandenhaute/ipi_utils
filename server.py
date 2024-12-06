@@ -406,7 +406,11 @@ def cleanup(args):
             assert sum(exists) == 1
         path = paths[exists.index(True)]
         path_xyz = Path(str(path)[:-6] + 'xyz')
+        print(path, path.exists())
+        print(path_xyz, path.exists())
         os.rename(path, path_xyz)
+        print(path, path.exists())
+        print(path_xyz, path.exists())
         traj = read(path_xyz, index=":")
         path.unlink()
         path_xyz.unlink()
