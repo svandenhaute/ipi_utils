@@ -112,7 +112,6 @@ def parse_arguments():
                         required=False,
                         help='Path to PyTorch model file')
     parser.add_argument('--warmup',
-                        type=bool,
                         action="store_true",
                         help='Path to XYZ file to initialize calculator')
 

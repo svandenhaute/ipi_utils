@@ -342,7 +342,7 @@ def start(args):
         def get_index(i, indices):
             phase_index = i % len(unique)
             to_select_from = indices[unique[phase_index]]
-            return to_select_from[i // len(indices)]
+            return to_select_from[i // len(unique)]
 
         get_index = partial(get_index, indices=indices)
 
