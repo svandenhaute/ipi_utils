@@ -409,6 +409,7 @@ def cleanup(args):
         os.rename(path, path_xyz)
         traj = read(path_xyz, index=":")
         path.unlink()
+        path_xyz.unlink()
         for atoms in traj:
             if not states[i].periodic:  # load and replace cell
                 atoms.pbc = False
