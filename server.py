@@ -1,5 +1,6 @@
 from functools import partial
 import argparse
+import shutil
 import ast
 import glob
 import os
@@ -370,6 +371,19 @@ def start(args):
         softexit.trigger(status="success", message=" @ SIMULATION: Exiting cleanly.")
     except TimeoutException:
         print("simulation timed out -- killing gracefully")
+    if "remd" in ET.tostring(input_xml, encoding="utf-8"):
+        remdsort("generated.xml")
+        for filepath in glob.glob("SRT_*"):
+            # does not use shutil because it is not instantaneous
+            source = filepath
+            target = filepath.replace("SRT_", "")
+            os.remove(target)
+            assert not Path(target).exists()
+            shutil.move(source, target)
+            dir_fd = os.open(os.path.dirname(Path.cwd()), os.O_RDONLY)
+            os.fsync(dir_fd)
+            os.close(dir_fd)
+            assert Path(target).exists()
 
 
 def cleanup(args):
@@ -380,16 +394,6 @@ def cleanup(args):
     for state in states:
         if np.allclose(state.cell, NONPERIODIC_CELL):
             state.cell[:] = 0.0
-    if "remd" in content:
-        remdsort("generated.xml")
-        for filepath in glob.glob("SRT_*"):
-            # does not use shutil because it is not instantaneous
-            source = filepath
-            target = filepath.replace("SRT_", "")
-            os.remove(target)
-            assert not Path(target).exists()
-            os.rename(source, target)
-            assert Path(target).exists()
     i = 0
     while i < len(states):
         # try all formattings of bead index (i-PI inconsistency)
@@ -405,21 +409,16 @@ def cleanup(args):
         else:
             assert sum(exists) == 1
         path = paths[exists.index(True)]
-        path_xyz = Path(str(path)[:-6] + 'xyz')
-        print(path, path.exists())
-        print(path_xyz, path.exists())
-        os.rename(path, path_xyz)
-        print(path, path.exists())
-        print(path_xyz, path.exists())
-        traj = read(path_xyz, index=":")
-        path.unlink()
-        path_xyz.unlink()
+        source = str(path)
+        traj = read(source, index=":", format='xyz')
+        print('{}: found {} states'.format(i, len(traj)))
+        #os.remove(source)
         for atoms in traj:
             if not states[i].periodic:  # load and replace cell
                 atoms.pbc = False
                 atoms.cell = None
             atoms.info.pop("ipi_comment", None)
-        write(paths[0], traj)  # always the same path
+        write(f'walker_{i}.xyz', traj)  # always the same path
         i += 1
 
 
