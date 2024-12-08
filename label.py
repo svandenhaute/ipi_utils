@@ -1,4 +1,5 @@
 import argparse
+import os
 
 from ase.io import read, write
 from ase.optimize import BFGS
@@ -38,7 +39,7 @@ if __name__ == '__main__':
     parser.add_argument(
         "--start",
         type=int,
-        default=0,
+        default=-1,
     )
     parser.add_argument(
         "--xyz",
@@ -71,7 +72,14 @@ if __name__ == '__main__':
     )
     atoms.calc = model_calculator
 
-    i = args.start
+    if args.start == -1:  # not passed, assume 0 unless SLURM variable is available
+        slurm_procid = os.environ.get('SLURM_PROCID', None)
+        if slurm_procid is None:  # just start at 0
+            i = 0
+        else:
+            assert slurm_procid < args.nclients
+            i = slurm_procid
+
     labeled = []
     while i < len(data):
         print('optimizing state {}'.format(i))
