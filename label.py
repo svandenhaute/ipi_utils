@@ -77,9 +77,11 @@ if __name__ == '__main__':
         if slurm_procid is None:  # just start at 0
             i = 0
         else:
-            assert slurm_procid < args.nclients
-            i = slurm_procid
+            i = int(slurm_procid)
+    else:
+        i = args.start
 
+    assert i < args.nclients
     labeled = []
     while i < len(data):
         print('optimizing state {}'.format(i))
