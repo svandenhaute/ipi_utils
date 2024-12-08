@@ -75,14 +75,15 @@ if __name__ == '__main__':
     if args.start == -1:  # not passed, assume 0 unless SLURM variable is available
         slurm_procid = os.environ.get('SLURM_PROCID', None)
         if slurm_procid is None:  # just start at 0
-            i = 0
+            start = 0
         else:
-            i = int(slurm_procid)
+            start = int(slurm_procid)
     else:
-        i = args.start
+        start = args.start
 
-    assert i < args.nclients
+    assert start < args.nclients
     labeled = []
+    i = start
     while i < len(data):
         print('optimizing state {}'.format(i))
         state = data[i]
@@ -100,4 +101,4 @@ if __name__ == '__main__':
 
         i += args.nclients
 
-    write('labeled_{}.xyz'.format(args.start), labeled)
+    write('labeled_{}.xyz'.format(start), labeled)
