@@ -410,7 +410,7 @@ def cleanup(args):
             assert sum(exists) == 1
         path = paths[exists.index(True)]
         source = str(path)
-        traj = read(source, index=":", format='xyz')
+        traj = read(source, index=":", format='extxyz')
         print('{}: found {} states'.format(i, len(traj)))
         #os.remove(source)
         for atoms in traj:
