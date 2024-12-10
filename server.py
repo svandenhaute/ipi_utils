@@ -320,7 +320,7 @@ def timeout_handler(signum, frame):
 def insert_data_start(input_xml, data_start):
     for child in input_xml:
         if child.tag == "system":
-            initialize = ET.Element("initialize", nbeads="1")
+            initialize = ET.Element("initialize", nbeads="1", cell_units="angstrom")
             initialize.text = "start_INDEX.xyz"
 
 
