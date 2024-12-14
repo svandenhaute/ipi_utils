@@ -106,6 +106,16 @@ def parse_arguments():
                         default=1,
                         required=False,
                         help='Path to PyTorch model file')
+    parser.add_argument('--use_svd',
+                        action='store_true',
+                        default=False,
+                        help='use SVD to tune bias direction')
+    parser.add_argument('--sigma',
+                        type=int,
+                        default=3,
+                        required=False,
+                        help='dimensions to use for biasing')
+
     parser.add_argument('--frequency',
                         type=int,
                         default=100,
@@ -137,6 +147,8 @@ def main():
             frequency=args.frequency,
             height=args.height,
             sigma=args.sigma,
+            use_svd=args.use_svd,
+            svd_dimensions=args.svd_dimensions,
             path_hills=Path(args.hills)
         )
 

@@ -62,11 +62,11 @@ RUN /bin/bash -c -o pipefail \
      pip install --no-cache-dir git+https://github.com/i-pi/i-pi.git@v3.0.0-beta4 && \
      pip install --no-cache-dir torch==2.5 --index-url https://download.pytorch.org/whl/${GPU_LIBRARY}"
 
+ARG DATE
 RUN /bin/bash -c -o pipefail \
     "pip install --no-cache-dir git+https://github.com/acesuit/mace.git@v0.3.8 && \
      pip install --no-cache-dir git+https://github.com/molmod/psiflow && \
      pip install --no-cache-dir git+https://github.com/molmod/sbc"
-ARG DATE
 
 # Set entrypoint
 RUN echo '#!/bin/bash' >> /opt/entry.sh && \
