@@ -110,7 +110,7 @@ def parse_arguments():
                         action='store_true',
                         default=False,
                         help='use SVD to tune bias direction')
-    parser.add_argument('--sigma',
+    parser.add_argument('--svd_dimensions',
                         type=int,
                         default=3,
                         required=False,
